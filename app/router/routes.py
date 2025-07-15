@@ -11,6 +11,7 @@ from app.log.logger import get_routes_logger
 from app.router import error_log_routes, gemini_routes, openai_routes, config_routes, scheduler_routes, stats_routes, version_routes, openai_compatiable_routes, vertex_express_routes
 from app.service.key.key_manager import get_key_manager_instance
 from app.service.stats.stats_service import StatsService
+from app.config.config import settings
 
 logger = get_routes_logger()
 
@@ -52,7 +53,8 @@ def setup_page_routes(app: FastAPI) -> None:
     @app.get("/", response_class=HTMLResponse)
     async def auth_page(request: Request):
         """认证页面"""
-        return templates.TemplateResponse("auth.html", {"request": request})
+        error = request.query_params.get("error")
+        return templates.TemplateResponse("auth.html", {"request": request, "error": error})
 
     @app.post("/auth")
     async def authenticate(request: Request):
@@ -71,11 +73,22 @@ def setup_page_routes(app: FastAPI) -> None:
                     key="auth_token", value=auth_token, httponly=True, max_age=3600
                 )
                 return response
-            logger.warning("Failed authentication attempt with invalid token")
-            return RedirectResponse(url="/", status_code=302)
+            logger.warning(f"Failed authentication attempt with invalid token: {auth_token}")
+            return RedirectResponse(url="/?error=认证失败，请检查令牌是否正确", status_code=302)
         except Exception as e:
             logger.error(f"Authentication error: {str(e)}")
-            return RedirectResponse(url="/", status_code=302)
+            return RedirectResponse(url="/?error=认证过程中发生错误，请重试", status_code=302)
+
+    @app.get("/debug/auth")
+    async def debug_auth():
+        """调试认证配置（仅用于故障排除）"""
+        return {
+            "auth_token_length": len(settings.AUTH_TOKEN) if settings.AUTH_TOKEN else 0,
+            "auth_token_preview": settings.AUTH_TOKEN[:5] + "..." if len(settings.AUTH_TOKEN) > 5 else settings.AUTH_TOKEN,
+            "allowed_tokens_count": len(settings.ALLOWED_TOKENS),
+            "allowed_tokens_preview": [token[:5] + "..." if len(token) > 5 else token for token in settings.ALLOWED_TOKENS],
+            "message": "请检查您输入的令牌是否与 auth_token_preview 匹配"
+        }
 
     @app.get("/keys", response_class=HTMLResponse)
     async def keys_page(request: Request):
