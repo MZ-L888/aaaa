@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: gemini-balance
+    env: python
+    plan: free
+    buildCommand: chmod +x build.sh && ./build.sh
+    startCommand: chmod +x start.sh && ./start.sh
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_TYPE
+        value: sqlite
+      - key: SQLITE_DATABASE
+        value: gemini_balance.db
+      - key: API_KEYS
+        value: '["your_gemini_api_key_here"]'
+      - key: ALLOWED_TOKENS
+        value: '["your_auth_token_here"]'
+      - key: AUTH_TOKEN
+        value: your_auth_token_here
+      - key: BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta
+      - key: TEST_MODEL
+        value: gemini-1.5-flash
+      - key: TOOLS_CODE_EXECUTION_ENABLED
+        value: "false"
+      - key: IMAGE_MODELS
+        value: '["gemini-2.0-flash-exp"]'
+      - key: SEARCH_MODELS
+        value: '["gemini-2.0-flash-exp","gemini-2.0-pro-exp"]'
+      - key: URL_NORMALIZATION_ENABLED
+        value: "false"
+      - key: SHOW_SEARCH_LINK
+        value: "true"
+      - key: SHOW_THINKING_PROCESS
+        value: "true"
+      - key: MAX_FAILURES
+        value: "10"
+      - key: MAX_RETRIES
+        value: "3"
+      - key: TIME_OUT
+        value: "300"
+      - key: TIMEZONE
+        value: Asia/Shanghai
+      - key: LOG_LEVEL
+        value: info
+      - key: FAKE_STREAM_ENABLED
+        value: "true"
+      - key: STREAM_OPTIMIZER_ENABLED
+        value: "false"
+      - key: PYTHON_VERSION
+        value: "3.10"
