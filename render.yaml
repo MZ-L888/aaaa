@@ -12,11 +12,11 @@ services:
       - key: SQLITE_DATABASE
         value: gemini_balance.db
       - key: API_KEYS
-        value: '["your_gemini_api_key_here"]'
+        value: '["AIzaSyDEMO_KEY_REPLACE_WITH_YOUR_ACTUAL_KEY"]'
       - key: ALLOWED_TOKENS
-        value: '["your_auth_token_here"]'
+        value: '["sk-demo-token-replace-with-your-token"]'
       - key: AUTH_TOKEN
-        value: your_auth_token_here
+        value: sk-demo-token-replace-with-your-token
       - key: BASE_URL
         value: https://generativelanguage.googleapis.com/v1beta
       - key: TEST_MODEL
@@ -27,6 +27,8 @@ services:
         value: '["gemini-2.0-flash-exp"]'
       - key: SEARCH_MODELS
         value: '["gemini-2.0-flash-exp","gemini-2.0-pro-exp"]'
+      - key: FILTERED_MODELS
+        value: '["gemini-1.0-pro-vision-latest","gemini-pro-vision"]'
       - key: URL_NORMALIZATION_ENABLED
         value: "false"
       - key: SHOW_SEARCH_LINK
@@ -47,5 +49,13 @@ services:
         value: "true"
       - key: STREAM_OPTIMIZER_ENABLED
         value: "false"
+      - key: PROXIES
+        value: "[]"
+      - key: VERTEX_API_KEYS
+        value: "[]"
+      - key: THINKING_MODELS
+        value: "[]"
+      - key: CUSTOM_HEADERS
+        value: "{}"
       - key: PYTHON_VERSION
         value: "3.10"
