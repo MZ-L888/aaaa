@@ -3,8 +3,8 @@ services:
     name: gemini-balance
     env: python
     plan: free
-    buildCommand: chmod +x build.sh && ./build.sh
-    startCommand: chmod +x start.sh && ./start.sh
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.simple_main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
       - key: DATABASE_TYPE
